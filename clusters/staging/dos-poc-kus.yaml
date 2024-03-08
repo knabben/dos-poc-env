@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: dospoc
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  path: ./
+  prune: true
+  retryInterval: 2m0s
+  sourceRef:
+    kind: OCIRepository
+    name: dos-poc
+  targetNamespace: default
+  timeout: 3m0s
+  wait: true
