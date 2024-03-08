@@ -14,7 +14,7 @@ repository:
 		kubectx kind-$(ENV); \
 		flux bootstrap github --token-auth \
 		--owner=$(GITHUB_USER) --repository=$(REPO_ENV) \
-		--branch=main --path=$(ENV) --personal; \
+		--branch=main --path=clusters/$(ENV) --personal; \
 	)
 
 .PHONY: 1-up repository
