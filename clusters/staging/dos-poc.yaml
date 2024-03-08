@@ -8,5 +8,5 @@ spec:
   interval: 1m0s
   provider: generic
   ref:
-    tag: 0.0.1
+    digest: sha256:1d6093c3257ba546f1c5265abb263da3f6a028accdc81040f7736ff2d1200129
   url: oci://ttl.sh/knabben/manifests/dos-poc
