@@ -1,8 +1,10 @@
 GITHUB_USER := knabben
 REPO_ENV := dos-poc-env
+OCI_MANIFEST := oci://ttl.sh/knabben/manifests/dos-poc
 
 ENVS := staging production
 
+.PHONY: 1-up check-env cluster repository
 1-up: check-env cluster repository
 	kind get clusters
 
@@ -17,7 +19,12 @@ repository:
 		--branch=main --path=clusters/$(ENV) --personal; \
 	)
 
-.PHONY: 1-up repository
+2-install:
+	@$(foreach ENV, $(ENVS), \
+		flux create source oci dos-poc \
+		--url=$(OCI_MANIFEST) \
+		--tag=latest --interval=1m; \
+	)
 
 x-delete:
 	@$(foreach ENV, $(ENVS), kind delete cluster --name $(ENV);)
