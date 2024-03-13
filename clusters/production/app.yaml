@@ -7,7 +7,7 @@ spec:
   interval: 5m0s
   provider: generic
   ref:
-    tag: latest
+    semver: ">=0.0.1"
   url: oci://ttl.sh/knabben/manifests/dos-poc
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
