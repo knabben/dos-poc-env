@@ -1,8 +1,10 @@
 GITHUB_USER := knabben
 REPO_ENV := dos-poc-env
+
 OCI_MANIFEST := oci://ttl.sh/knabben/manifests/dos-poc
 
 ENVS := staging production
+REPOS := ttl.sh/knabben/dos-poc ttl.sh/knabben/manifests/dos-poc
 
 .PHONY: 1-up check-env cluster repository
 1-up: check-env cluster repository
@@ -23,17 +25,25 @@ repository:
 		--personal; \
 	)
 
-2-install:
-	@$(foreach ENV, $(ENVS), \
-		flux create source oci dos-poc \
-		--url=$(OCI_MANIFEST) \
-		--tag=latest --interval=1m; \
-	)
+.PHONY: 2-policy
+2-policy:
+	echo
+
+.PHONY: 3-slack
+3-slack:
+	echo
+
 
 x-delete:
 	@$(foreach ENV, $(ENVS), kind delete cluster --name $(ENV);)
+
+x-clean:
+	@$(foreach REPO, $(REPOS), \
+		crane ls $(REPO) --full-ref | xargs -n1 crane digest | xargs -i -n1 crane delete '$(REPO)@{}'; \
+	)
 
 check-env:
 ifndef GITHUB_TOKEN
 	$(error GITHUB_TOKEN is undefined)
 endif
+

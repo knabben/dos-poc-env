@@ -18,8 +18,27 @@ make 1-up
 This will create:
 
 1. A kind cluster called `staging` and another `production`
-2. Bootstrap FluxCD with a GitHub mono repostiory .
+2. Bootstrap FluxCD with a GitHub mono repository.
 
+
+### Installing Policy Controller
+
+To install the sigstore policy controller with:
+
+```
+make 2-policy
+```
+
+This will install the controller and a default Image policy for validating a signed OCI image from the Github CI
+
+
+### (optional) Alerting on Slack
+
+As an optional step this enable alert on Slack for error in the image validation
+
+```
+make 3-slack SLACK_TOKEN=xoxb
+```
 
 ### Cleanup and leaving no trace behind
 
@@ -27,6 +46,12 @@ Delete both kind clusters with:
 
 ```
 make x-delete
+```
+
+Delete registry tags from both OCI manifests and images
+
+```
+make x-clean
 ```
 
 If you have created an app on Slack don't forget to clean it up as well.
