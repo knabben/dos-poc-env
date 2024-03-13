@@ -16,13 +16,13 @@ metadata:
   name: app-dospoc
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m0s
   path: ./
   prune: true
+  wait: true
   retryInterval: 2m0s
   sourceRef:
     kind: OCIRepository
     name: oci-dospoc
   targetNamespace: default
   timeout: 3m0s
-  wait: true

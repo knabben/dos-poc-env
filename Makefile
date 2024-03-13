@@ -15,8 +15,12 @@ repository:
 	@$(foreach ENV, $(ENVS), \
 		kubectx kind-$(ENV); \
 		flux bootstrap github --token-auth \
-		--owner=$(GITHUB_USER) --repository=$(REPO_ENV) \
-		--branch=main --path=clusters/$(ENV) --personal; \
+		--components-extra=image-reflector-controller,image-automation-controller \
+		--owner=$(GITHUB_USER) \
+		--repository=$(REPO_ENV) \
+		--branch=main \
+		--path=clusters/$(ENV) \
+		--personal; \
 	)
 
 2-install:
