@@ -27,7 +27,13 @@ repository:
 
 .PHONY: 2-policy
 2-policy:
-	echo
+	helm repo add sigstore https://sigstore.github.io/helm-charts
+	helm repo update
+	@$(foreach ENV, $(ENVS), \
+		kubectx kind-$(ENV); \
+		kubectl create namespace cosign-system; \
+		helm install policy-controller -n cosign-system sigstore/policy-controller --devel; \
+	)
 
 .PHONY: 3-slack
 3-slack:
