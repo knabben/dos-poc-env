@@ -1,0 +1,28 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: slack-bot
+  namespace: flux-system
+spec:
+  type: slack
+  channel: alerts
+  address: https://slack.com/api/chat.postMessage
+  secretRef:
+    name: slack-bot-token
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: slack
+  namespace: flux-system
+spec:
+  summary: "Notification for Kustomization reconciliation error"
+  providerRef:
+    name: slack-bot
+  eventSeverity: error
+  eventSources:
+    - kind: OCIRepository
+      name: '*'
+    - kind: Kustomization
+      name: '*'

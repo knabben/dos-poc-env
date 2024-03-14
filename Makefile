@@ -33,11 +33,17 @@ repository:
 		kubectx kind-$(ENV); \
 		kubectl create namespace cosign-system; \
 		helm install policy-controller -n cosign-system sigstore/policy-controller --devel; \
+		kubectl label namespace default policy.sigstore.dev/include=true; \
+		kubectl apply -f policy/policy.yaml; \
 	)
 
 .PHONY: 3-slack
-3-slack:
-	echo
+3-slack: check-token
+	@$(foreach ENV, $(ENVS), \
+		kubectx kind-$(ENV); \
+		kubectl -n flux-system create secret generic slack-bot-token --from-literal=token=$(SLACK_TOKEN); \
+		kubectl apply -f alert/alert.yaml; \
+	)
 
 
 x-delete:
@@ -51,5 +57,10 @@ x-clean:
 check-env:
 ifndef GITHUB_TOKEN
 	$(error GITHUB_TOKEN is undefined)
+endif
+
+check-token:
+ifndef SLACK_TOKEN
+	$(error SLACK_TOKEN is undefined)
 endif
 
