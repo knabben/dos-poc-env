@@ -11,26 +11,22 @@ spec:
       - issuer: https://token.actions.githubusercontent.com
         subject: https://github.com/knabben/dos-poc/.github/workflows/sign.yml@refs/heads/main
     attestations:
-    - name: musthave
+    - name: blockcve
       predicateType: "https://cyclonedx.org/bom"
       policy:
         type: cue
         data: |
-          import "encoding/json"
           import "strings"
-          import "list"
 
-          #Predicate: {
-            Data: string
-            Timestamp: string
-          }
-
-          cveList: [ "CVE-2023-39325" ]
-
+          cve: "CVE-2023-39325"
+            
           predicate: {
             vulnerabilities: [...]
-            result: [ for v in vulnerabilities if list.Contains(cveList, v.id) {v.id} ]
-            ...
+            error: strings.Join([ 
+              for v in vulnerabilities 
+                if v.id == cve {
+                  "**" + cve + "** encountered in the image."
+                } 
+            ], "")
           }
-
-          predicate: result: list.MaxItems(0)
+          predicate: error: ""
